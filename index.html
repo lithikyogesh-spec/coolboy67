@@ -5,7 +5,58 @@
     <title>My Live GitHub Page</title>
 </head>
 <body>
-    <h1>Juan is a monkey!</h1>
-    <p>This HTML file is hosted for free on GitHub.</p>
+    <h1>calculator!</h1>
+    <p>this is a self-made calculator.</p>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <!-- Links our external stylesheet for design -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Main calculator container wrapper -->
+    <div class="calculator">
+        <!-- The screen display area where numbers appear -->
+        <input type="text" id="display" readonly>
+        
+        <!-- Grid layout container for all interactive keys -->
+        <div class="buttons">
+            <!-- Clear button -->
+            <button onclick="clearDisplay()" class="operator">C</button>
+            <!-- Divide button -->
+            <button onclick="appendValue('/')" class="operator">/</button>
+            <!-- Multiply button -->
+            <button onclick="appendValue('*')" class="operator">*</button>
+            <!-- Minus button -->
+            <button onclick="appendValue('-')" class="operator">-</button>
+
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <!-- Plus button -->
+            <button onclick="appendValue('+')" class="operator">+</button>
+
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <!-- Equals button -->
+            <button onclick="calculateResult()" class="equals">=</button>
+
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button onclick="appendValue('0')">0</button>
+        </div>
+    </div>
+
+    <!-- Links our JavaScript file for the backend calculations -->
+    <script src="script.js"></script>
+</body>
+</html>
+
 </body>
 </html>
