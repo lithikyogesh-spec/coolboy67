@@ -2,50 +2,316 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lithik's Aura Calc</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcy - Advanced Scientific Calculator</title>
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --calc-bg: #ffffff;
+            --screen-bg: #1e293b;
+            --screen-text: #ffffff;
+            --btn-bg: #f8fafc;
+            --btn-text: #0f172a;
+            --btn-hover: #e2e8f0;
+            --btn-action-bg: #eff6ff;
+            --btn-action-text: #2563eb;
+            --btn-action-hover: #dbeafe;
+            --border-color: #e2e8f0;
+            --text-muted: #64748b;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --calc-bg: #1e293b;
+            --screen-bg: #0f172a;
+            --screen-text: #f8fafc;
+            --btn-bg: #334155;
+            --btn-text: #f1f5f9;
+            --btn-hover: #475569;
+            --btn-action-bg: #1e3a8a;
+            --btn-action-text: #60a5fa;
+            --btn-action-hover: #1e40af;
+            --border-color: #334155;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            background: var(--calc-bg);
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+        }
+
+        .calc-main {
+            flex: 1;
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--btn-text);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .toggle-btn {
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .toggle-btn:hover {
+            background: var(--btn-hover);
+        }
+
+        .screen {
+            background: var(--screen-bg);
+            color: var(--screen-text);
+            padding: 24px;
+            border-radius: 16px;
+            text-align: right;
+            margin-bottom: 24px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .screen-mode {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .expression {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            min-height: 1.5rem;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .result {
+            font-size: 2.5rem;
+            font-weight: 600;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            padding: 16px 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            user-select: none;
+        }
+
+        button:hover {
+            background: var(--btn-hover);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .btn-action {
+            background: var(--btn-action-bg);
+            color: var(--btn-action-text);
+        }
+
+        .btn-action:hover {
+            background: var(--btn-action-hover);
+        }
+
+        .btn-equals {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .btn-equals:hover {
+            background: #1d4ed8;
+        }
+
+        .history-sidebar {
+            width: 260px;
+            border-left: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            color: var(--btn-text);
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+        }
+
+        .history-item {
+            padding: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            text-align: right;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .history-item:hover {
+            background: var(--btn-hover);
+        }
+
+        .history-expr {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .history-res {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--btn-text);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .scientific {
+                display: none; /* Hide advanced keys on small mobile views to protect layout */
+            }
+            .history-sidebar {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1 style="color:#FFFFFF;">calculator!</h1>
-    <br>
-    <p style="color:#FFFFFF;">Levi is a hater.</p>
-    
-    <!-- Main calculator container wrapper -->
-    <div class="calculator">
-        <!-- The screen display area where numbers appear -->
-        <input type="text" id="display" readonly>
-        
-        <!-- Grid layout container for all interactive keys -->
-        <div class="buttons">
-            <!-- Clear button -->
-            <button onclick="clearDisplay()" class="operator">C</button>
-            <!-- Divide button -->
-            <button onclick="appendValue('/')" class="operator">/</button>
-            <!-- Multiply button -->
-            <button onclick="appendValue('*')" class="operator">*</button>
-            <!-- Minus button -->
-            <button onclick="appendValue('-')" class="operator">-</button>
 
-            <button onclick="appendValue('7')">7</button>
-            <button onclick="appendValue('8')">8</button>
-            <button onclick="appendValue('9')">9</button>
-            <!-- Plus button -->
-            <button onclick="appendValue('+')" class="operator">+</button>
-
-            <button onclick="appendValue('4')">4</button>
-            <button onclick="appendValue('5')">5</button>
-            <button onclick="appendValue('6')">6</button>
-            <!-- Equals button -->
-            <button onclick="calculateResult()" class="equals">=</button>
-
-            <button onclick="appendValue('1')">1</button>
-            <button onclick="appendValue('2')">2</button>
-            <button onclick="appendValue('3')">3</button>
-            <button onclick="appendValue('0')">0</button>
+<div class="container">
+    <!-- Main Calculator Area -->
+    <div class="calc-main">
+        <div class="header">
+            <div class="logo">Calcy++</div>
+            <div class="controls">
+                <button class="toggle-btn" id="mode-toggle">DEG</button>
+                <button class="toggle-btn" id="theme-toggle">🌓 Theme</button>
+            </div>
         </div>
-    </div>
 
-    <!-- Links our JavaScript file for the backend calculations -->
-    <script src="script.js"></script>
-</body>
-</html>
+        <div class="screen">
+            <div class="screen-mode" id="angle-indicator">Degrees</div>
+            <div class="expression" id="expression-display"></div>
+            <div class="result" id="result-display">0</div>
+        </div>
+
+        <div class="grid">
+            <!-- Row 1: Sci Functions -->
+            <button class="btn-action scientific" onclick="inputFunc('sin(')">sin</button>
+            <button class="btn-action scientific" onclick="inputFunc('cos(')">cos</button>
+            <button class="btn-action scientific" onclick="inputFunc('tan(')">tan</button>
+            <button class="btn-action scientific" onclick="inputFunc('asin(')">sin⁻¹</button>
+            <button class="btn-action scientific" onclick="inputFunc('acos(')">cos⁻¹</button>
+            <button class="btn-action scientific" onclick="inputFunc('atan(')">tan⁻¹</button>
+
+            <!-- Row 2: Sci Constants / Memory -->
+            <button class="btn-action scientific" onclick="inputFunc('log(')">log</button>
+            <button class="btn-action scientific" onclick="inputFunc('ln(')">ln</button>
+            <button class="btn-action scientific" onclick="input('π')">π</button>
+            <button class="btn-action scientific" onclick="input('e')">e</button>
+            <button class="btn-action scientific" onclick="inputFunc('sqrt(')">√</button>
+            <button class="btn-action scientific" onclick="input('^')">xʸ</button>
+
+            <!-- Row 3: Command Row -->
+            <button class="btn-action" onclick="clearAll()">AC</button>
+            <button class="btn-action" onclick="backspace()">⌫</button>
+            <button class="btn-action" onclick="input('(')">(</button>
+            <button class="btn-action" onclick="input(')')">)</button>
+            <button class="btn-action" onclick="input('%')">%</button>
+            <button class="btn-action" onclick="input('/')">÷</button>
+
+            <!-- Row 4: Digits and Operators -->
+            <button onclick="input('7')">7</button>
+            <button onclick="input('8')">8</button>
+            <button onclick="input('9')">9</button>
+            <button class="btn-action" onclick="input('*')">×</button>
+            <button class="scientific" onclick="inputFunc('fact(')">x!</button>
+            <button class="scientific" onclick="input('1/')">1/x</button>
+
+            <!-- Row 5: Digits and Operators -->
+            <button onclick="input('4')">4</button>
+            <button onclick="input('5')">5</button>
+            <button onclick="input('6')">6</button>
+            <button class="btn-action" onclick="input('-')">-</button>
+            <button class="scientific" onclick="input('^2')">x²</button>
+            <button class="scientific" id="ans-btn" onclick="useAns()">Ans</button>
+
+            <!-- Row 6: Digits and Bottom Row -->
+            <button onclick="input('1')">1</button>
+            <button onclick="input('2')">2</button>
+            <button onclick="input('3')">3</button>
+            <button class="btn-action" onclick="input('+')">+</button>
+            <button onclick="input('0')" style="grid-column: span 2;">0</button>
+
+            <!-- Row 7: Decimal and Equals -->
