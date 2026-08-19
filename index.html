@@ -4,254 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcy++</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #121026;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .calculator {
-            background-color: #1a1636;
-            border-radius: 20px;
-            padding: 25px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .title {
-            color: #a488ef;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .controls {
-            display: flex;
-            gap: 10px;
-        }
-        .toggle-btn {
-            background-color: #251f4f;
-            color: #ffffff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .toggle-btn.active {
-            background-color: #3d3280;
-        }
-        .display {
-            background-color: #0d0a1a;
-            color: #ffffff;
-            width: 100%;
-            height: 80px;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 32px;
-            text-align: right;
-            margin-bottom: 25px;
-            outline: none;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-        }
-        button {
-            background-color: #251f4f;
-            color: #b3b0cd;
-            border: none;
-            border-radius: 8px;
-            height: 50px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        button:hover {
-            background-color: #32296b;
-        }
-        .btn-num {
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .btn-equal {
-            grid-row: span 2;
-            height: auto;
-            background-color: #a488ef;
-            color: #121026;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .btn-equal:hover {
-            background-color: #bdabf4;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="calculator">
-    <div class="header">
-        <div class="title">Calcy++</div>
-        <div class="controls">
-            <button class="toggle-btn active" id="degRadBtn" onclick="toggleDegRad()">DEG</button>
-            <button class="toggle-btn">☀️ Light</button>
+<div class="calculator-container">
+    <div class="calculator">
+        <div class="header">
+            <div class="title">Calcy++</div>
+            <div class="controls">
+                <button class="toggle-btn active" id="degRadBtn" onclick="toggleDegRad()">DEG</button>
+                <button class="toggle-btn">☀️ Light</button>
+            </div>
+        </div>
+        
+        <input type="text" class="display" id="screen" value="0" readonly>
+        
+        <div class="grid">
+            <!-- Row 1 -->
+            <button onclick="inputFunc('sin')">sin</button>
+            <button onclick="inputFunc('cos')">cos</button>
+            <button onclick="inputFunc('tan')">tan</button>
+            <button onclick="inputFunc('asin')">sin⁻¹</button>
+            <button onclick="inputFunc('acos')">cos⁻¹</button>
+            <button onclick="inputFunc('atan')">tan⁻¹</button>
+            
+            <!-- Row 2 -->
+            <button onclick="inputFunc('log')">log</button>
+            <button onclick="inputFunc('ln')">ln</button>
+            <button onclick="input('π')">π</button>
+            <button onclick="input('e')">e</button>
+            <button onclick="inputFunc('sqrt')">√</button>
+            <button onclick="input('^')">xʸ</button>
+            
+            <!-- Row 3 -->
+            <button class="btn-ac" onclick="clearScreen()">AC</button>
+            <button onclick="backspace()">⌫</button>
+            <button onclick="input('(')">(</button>
+            <button onclick="input(')')">)</button>
+            <button onclick="input('%')">%</button>
+            <button onclick="input('/')">÷</button>
+            
+            <!-- Row 4 -->
+            <button class="btn-num" onclick="input('7')">7</button>
+            <button class="btn-num" onclick="input('8')">8</button>
+            <button class="btn-num" onclick="input('9')">9</button>
+            <button onclick="input('*')">×</button>
+            <button onclick="inputFunc('abs')">abs</button>
+            <button onclick="input('-')">-</button>
+            
+            <!-- Row 5 -->
+            <button class="btn-num" onclick="input('4')">4</button>
+            <button class="btn-num" onclick="input('5')">5</button>
+            <button class="btn-num" onclick="input('6')">6</button>
+            <button onclick="input('+')">+</button>
+            <button onclick="inputFunc('fact')">n!</button>
+            <button class="btn-equal" onclick="calculate()">=</button>
+            
+            <!-- Row 6 -->
+            <button class="btn-num" onclick="input('1')">1</button>
+            <button class="btn-num" onclick="input('2')">2</button>
+            <button class="btn-num" onclick="input('3')">3</button>
+            <button class="btn-num" style="grid-column: span 2;" onclick="input('0')">0</button>
         </div>
     </div>
-    
-    <input type="text" class="display" id="screen" value="0" readonly>
-    
-    <div class="grid">
-        <!-- Row 1 -->
-        <button onclick="inputFunc('sin')">sin</button>
-        <button onclick="inputFunc('cos')">cos</button>
-        <button onclick="inputFunc('tan')">tan</button>
-        <button onclick="inputFunc('asin')">sin⁻¹</button>
-        <button onclick="inputFunc('acos')">cos⁻¹</button>
-        <button onclick="inputFunc('atan')">tan⁻¹</button>
-        
-        <!-- Row 2 -->
-        <button onclick="inputFunc('log')">log</button>
-        <button onclick="inputFunc('ln')">ln</button>
-        <button onclick="input('π')">π</button>
-        <button onclick="input('e')">e</button>
-        <button onclick="inputFunc('sqrt')">√</button>
-        <button onclick="input('^')">xʸ</button>
-        
-        <!-- Row 3 -->
-        <button onclick="clearScreen()">AC</button>
-        <button onclick="backspace()">⌫</button>
-        <button onclick="input('(')">(</button>
-        <button onclick="input(')')">)</button>
-        <button onclick="input('%')">%</button>
-        <button onclick="input('/')">÷</button>
-        
-        <!-- Row 4 -->
-        <button class="btn-num" onclick="input('7')">7</button>
-        <button class="btn-num" onclick="input('8')">8</button>
-        <button class="btn-num" onclick="input('9')">9</button>
-        <button onclick="input('*')">×</button>
-        <button onclick="inputFunc('abs')">abs</button>
-        <button onclick="input('-')">-</button>
-        
-        <!-- Row 5 -->
-        <button class="btn-num" onclick="input('4')">4</button>
-        <button class="btn-num" onclick="input('5')">5</button>
-        <button class="btn-num" onclick="input('6')">6</button>
-        <button onclick="input('+')">+</button>
-        <button onclick="inputFunc('fact')">n!</button>
-        <button class="btn-equal" onclick="calculate()">=</button>
-        
-        <!-- Row 6 -->
-        <button class="btn-num" onclick="input('1')">1</button>
-        <button class="btn-num" onclick="input('2')">2</button>
-        <button class="btn-num" onclick="input('3')">3</button>
-        <button class="btn-num" style="grid-column: span 2;" onclick="input('0')">0</button>
+
+    <!-- History Panel Side Component -->
+    <div class="history-panel">
+        <div class="history-header">
+            <h3>History</h3>
+            <button class="clear-history-btn" onclick="clearHistory()">Clear</button>
+        </div>
+        <div class="history-list" id="historyList">
+            <div class="history-empty" id="emptyMessage">No recent equations</div>
+        </div>
     </div>
 </div>
 
-<script>
-    let screen = document.getElementById('screen');
-    let isDeg = true;
-
-    function toggleDegRad() {
-        isDeg = !isDeg;
-        document.getElementById('degRadBtn').innerText = isDeg ? 'DEG' : 'RAD';
-    }
-
-    function input(value) {
-        if (screen.value === '0' && !isNaN(value)) {
-            screen.value = value;
-        } else {
-            screen.value += value;
-        }
-    }
-
-    function inputFunc(func) {
-        if (screen.value === '0') screen.value = '';
-        screen.value += func + '(';
-    }
-
-    function clearScreen() {
-        screen.value = '0';
-    }
-
-    function backspace() {
-        if (screen.value.length > 1) {
-            screen.value = screen.value.slice(0, -1);
-        } else {
-            screen.value = '0';
-        }
-    }
-
-    function factorial(n) {
-        if (n < 0) return NaN;
-        if (n === 0 || n === 1) return 1;
-        let result = 1;
-        for (let i = 2; i <= n; i++) result *= i;
-        return result;
-    }
-
-    function calculate() {
-        try {
-            let expression = screen.value;
-            
-            // Replace constants
-            expression = expression.replace(/π/g, 'Math.PI');
-            expression = expression.replace(/e/g, 'Math.E');
-            
-            // Replace basic functions
-            expression = expression.replace(/sqrt/g, 'Math.sqrt');
-            expression = expression.replace(/abs/g, 'Math.abs');
-            expression = expression.replace(/\^/g, '**');
-
-            // Handle Factorial function format: fact(x)
-            expression = expression.replace(/fact\(([^)]+)\)/g, 'factorial($1)');
-
-            // Handle Trigonometry (DEG vs RAD adjustment)
-            const angleMultiplier = isDeg ? '(Math.PI / 180)' : '1';
-            
-            expression = expression.replace(/sin\(([^)]+)\)/g, `Math.sin(($1) * ${angleMultiplier})`);
-            expression = expression.replace(/cos\(([^)]+)\)/g, `Math.cos(($1) * ${angleMultiplier})`);
-            expression = expression.replace(/tan\(([^)]+)\)/g, `Math.tan(($1) * ${angleMultiplier})`);
-            
-            // Inverse Trig
-            const inverseMultiplier = isDeg ? '(180 / Math.PI)' : '1';
-            expression = expression.replace(/asin\(([^)]+)\)/g, `(Math.asin($1) * ${inverseMultiplier})`);
-            expression = expression.replace(/acos\(([^)]+)\)/g, `(Math.acos($1) * ${inverseMultiplier})`);
-            expression = expression.replace(/atan\(([^)]+)\)/g, `(Math.atan($1) * ${inverseMultiplier})`);
-
-            // Logs
-            expression = expression.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
-            expression = expression.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
-
-            // Evaluate expression safely
-            let result = Function('"use strict";return (' + expression + ')')();
-            
-            if (isNaN(result) || !isFinite(result)) {
-                screen.value = 'Error';
-            } else {
-                screen.value = Number(result.toFixed(8)).toString();
-            }
-        } catch (error) {
-            screen.value = 'Error';
-        }
-    }
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
